@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { Product } from '../store/products'
 import { useCartStore } from '../store/cart'
 import { useSettingsStore } from '../store/settings'
@@ -14,6 +14,41 @@ const settingsStore = useSettingsStore()
 
 const imageLoaded = ref(false)
 const imageFailed = ref(false)
+const imgRef = ref<HTMLImageElement | null>(null)
+let loadTimer: ReturnType<typeof setTimeout> | null = null
+
+// Immediate null check
+if (!props.product.image) {
+  imageFailed.value = true
+}
+
+onMounted(() => {
+  // 1. Cache Catch: Check if image is already complete (cached)
+  if (imgRef.value?.complete && imgRef.value.naturalWidth > 0) {
+    imageLoaded.value = true
+  }
+
+  // 2. Fail-Safe Timer: Force fallback if image takes > 4s
+  loadTimer = setTimeout(() => {
+    if (!imageLoaded.value) {
+      imageFailed.value = true
+    }
+  }, 4000)
+})
+
+onUnmounted(() => {
+  if (loadTimer) clearTimeout(loadTimer)
+})
+
+const handleLoad = () => {
+  imageLoaded.value = true
+  if (loadTimer) clearTimeout(loadTimer)
+}
+
+const handleError = () => {
+  imageFailed.value = true
+  if (loadTimer) clearTimeout(loadTimer)
+}
 
 const formatPrice = (price: number) => {
   return price.toLocaleString() + ' RWF'
@@ -22,7 +57,7 @@ const formatPrice = (price: number) => {
 
 <template>
   <div class="group bg-white dark:bg-zinc-900 rounded-3xl p-4 border border-zinc-100 dark:border-zinc-800 hover:shadow-2xl hover:shadow-orange-500/10 transition-all duration-300 flex flex-col h-full">
-    <!-- Image Area - Real Photography with Loading State & Fallback -->
+    <!-- Image Area - Real Photography with Robust Loading & Fallback -->
     <router-link 
       :to="'/product/' + product.id" 
       class="aspect-square w-full overflow-hidden bg-stone-100 dark:bg-zinc-950/50 rounded-2xl mb-4 relative block cursor-pointer"
@@ -43,11 +78,13 @@ const formatPrice = (price: number) => {
 
       <!-- Main Product Image -->
       <img 
+        v-if="product.image"
         v-show="imageLoaded && !imageFailed"
+        ref="imgRef"
         :src="product.image" 
         :alt="product.name"
-        @load="imageLoaded = true"
-        @error="imageFailed = true"
+        @load="handleLoad"
+        @error="handleError"
         loading="lazy"
         decoding="async"
         class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
@@ -60,7 +97,7 @@ const formatPrice = (price: number) => {
       <!-- Stock Badge -->
       <div class="absolute top-2 right-2">
         <span v-if="!product.inStock" class="bg-zinc-900/80 backdrop-blur-md text-white text-[10px] px-2 py-1 rounded-full font-bold uppercase tracking-tighter">
-          {{ settingsStore.t('soldOut') }}
+          {{ settingsStore.t('sold_out') }}
         </span>
       </div>
     </router-link>
@@ -83,7 +120,7 @@ const formatPrice = (price: number) => {
       <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 group-hover/btn:rotate-12 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4" />
       </svg>
-      {{ product.inStock ? settingsStore.t('addToCart') : settingsStore.t('soldOut') }}
+      {{ product.inStock ? settingsStore.t('add_to_cart') : settingsStore.t('sold_out') }}
     </button>
   </div>
 </template>

@@ -57,7 +57,7 @@ const changeLocale = (loc: Locale) => {
               v-model="searchQuery"
               @input="handleSearch"
               type="text" 
-              :placeholder="settingsStore.t('searchPlaceholder')" 
+              :placeholder="settingsStore.t('search_placeholder')" 
               class="w-full bg-stone-100/50 dark:bg-zinc-900 border-none rounded-2xl py-2.5 pl-11 pr-4 text-sm font-bold focus:ring-4 focus:ring-orange-500/10 focus:bg-white dark:focus:bg-zinc-800 transition-all outline-none shadow-inner"
             >
           </div>
@@ -137,7 +137,7 @@ const changeLocale = (loc: Locale) => {
           v-model="searchQuery"
           @input="handleSearch"
           type="text" 
-          :placeholder="settingsStore.t('searchPlaceholder')" 
+          :placeholder="settingsStore.t('search_placeholder')" 
           class="w-full bg-stone-100 dark:bg-zinc-900 border-none rounded-2xl py-3 pl-11 pr-4 text-sm font-bold focus:ring-4 focus:ring-orange-500/10 transition-all outline-none"
         >
       </div>
@@ -164,15 +164,15 @@ const changeLocale = (loc: Locale) => {
         <div class="flex flex-col items-center md:items-start gap-2">
           <div class="flex items-center gap-2">
             <span class="text-xl font-black text-orange-600 tracking-tighter">SIMBA</span>
-            <span class="text-[10px] font-black bg-orange-500 text-white px-2 py-0.5 rounded-full uppercase tracking-tighter">2.0</span>
+            <span class="text-[10px] font-black bg-orange-500 text-white px-2 py-0.5 rounded-full uppercase tracking-tighter shadow-lg shadow-orange-500/20">2.0</span>
           </div>
           <p class="text-xs font-bold text-stone-400 uppercase tracking-widest">Rwanda's Premier Online Supermarket</p>
         </div>
         
         <nav class="flex gap-8">
-          <router-link to="/about" class="text-sm font-black text-stone-400 hover:text-orange-600 uppercase tracking-widest transition-colors">About Us</router-link>
-          <router-link to="/contact" class="text-sm font-black text-stone-400 hover:text-orange-600 uppercase tracking-widest transition-colors">Contact</router-link>
-          <a href="#" class="text-sm font-black text-stone-400 hover:text-orange-600 uppercase tracking-widest transition-colors">Promotions</a>
+          <router-link to="/about" class="text-sm font-black text-stone-400 hover:text-orange-600 uppercase tracking-widest transition-colors">{{ settingsStore.t('about_us') }}</router-link>
+          <router-link to="/contact" class="text-sm font-black text-stone-400 hover:text-orange-600 uppercase tracking-widest transition-colors">{{ settingsStore.t('contact_us') }}</router-link>
+          <a href="#" class="text-sm font-black text-stone-400 hover:text-orange-600 uppercase tracking-widest transition-colors">{{ settingsStore.t('promotions') }}</a>
         </nav>
         
         <p class="text-[10px] font-bold text-stone-300 uppercase tracking-[0.2em]">&copy; 2026 Simba Supermarket Ltd.</p>
