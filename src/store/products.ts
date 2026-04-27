@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import productsData from '../data/simba_products.json'
+import { searchProducts } from '../services/groqService'
 
 export interface Product {
   id: number
@@ -17,6 +18,9 @@ export const useProductStore = defineStore('products', {
     products: productsData.products as Product[],
     selectedCategory: 'All',
     searchQuery: '',
+    aiMessage: '',
+    isAiLoading: false,
+    aiMatchedIds: [] as number[],
   }),
   getters: {
     categories: (state) => {
@@ -25,6 +29,11 @@ export const useProductStore = defineStore('products', {
     },
     filteredProducts: (state) => {
       let filtered = state.products
+      
+      if (state.aiMatchedIds.length > 0) {
+        return state.products.filter(p => state.aiMatchedIds.includes(p.id))
+      }
+
       if (state.selectedCategory !== 'All') {
         filtered = filtered.filter(p => p.category === state.selectedCategory)
       }
@@ -44,9 +53,27 @@ export const useProductStore = defineStore('products', {
   actions: {
     setCategory(category: string) {
       this.selectedCategory = category
+      this.aiMatchedIds = []
+      this.aiMessage = ''
     },
     setSearchQuery(query: string) {
       this.searchQuery = query
+      if (!query) {
+        this.aiMatchedIds = []
+        this.aiMessage = ''
+      }
+    },
+    async executeAiSearch() {
+      if (!this.searchQuery) return
+      
+      this.isAiLoading = true
+      this.aiMessage = ''
+      
+      const response = await searchProducts(this.searchQuery, this.products)
+      
+      this.aiMessage = response.message
+      this.aiMatchedIds = response.matched_product_ids
+      this.isAiLoading = false
     }
   }
 })

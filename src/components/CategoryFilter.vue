@@ -1,7 +1,9 @@
 <script setup lang="ts">
+import { useI18n } from 'vue-i18n'
 import { useProductStore } from '../store/products'
 import { storeToRefs } from 'pinia'
 
+const { t } = useI18n()
 const productStore = useProductStore()
 const { categories, selectedCategory } = storeToRefs(productStore)
 </script>
@@ -20,7 +22,7 @@ const { categories, selectedCategory } = storeToRefs(productStore)
             : 'bg-white dark:bg-zinc-900 border-stone-200 dark:border-zinc-800 text-stone-600 dark:text-zinc-400 shadow-sm hover:border-orange-200 dark:hover:border-orange-900/30'
         ]"
       >
-        {{ category }}
+        {{ t('categories.' + category) }}
       </button>
     </div>
   </div>

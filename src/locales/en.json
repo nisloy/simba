@@ -1,0 +1,53 @@
+{
+  "nav": {
+    "about_us": "About Us",
+    "contact_us": "Contact Us",
+    "promotions": "Promotions",
+    "account": "Account",
+    "login": "Login",
+    "signup": "Sign Up",
+    "dark_mode": "Dark Mode"
+  },
+  "hero": {
+    "title": "RWANDA'S PREMIER FRESH MARKET.",
+    "desc": "Experience the finest local produce and global essentials delivered with Rwandan warmth. We bring the harvest directly to your doorstep.",
+    "shop_now": "Shop Now"
+  },
+  "search": {
+    "placeholder": "Search products...",
+    "no_items": "No items found in this category."
+  },
+  "product": {
+    "add_to_cart": "Add to Cart",
+    "sold_out": "Sold Out",
+    "featured": "FEATURED",
+    "spotlight": "SPOTLIGHT",
+    "price": "Price"
+  },
+  "cart": {
+    "title": "Your Cart",
+    "checkout": "Proceed to Checkout",
+    "total": "Total Amount",
+    "empty": "Your cart is empty",
+    "continue": "Continue Shopping"
+  },
+  "payment": {
+    "select_provider": "Select Provider",
+    "number": "Payment Number",
+    "confirm": "Confirm Payment",
+    "success": "Success!",
+    "confirmed": "Your order is confirmed"
+  },
+  "categories": {
+    "All": "All",
+    "Alcoholic Drinks": "Alcoholic Drinks",
+    "Baby Products": "Baby Products",
+    "Cleaning & Sanitary": "Cleaning & Sanitary",
+    "Cosmetics & Personal Care": "Cosmetics & Personal Care",
+    "Food Products": "Food Products",
+    "Kitchenware & Electronics": "Kitchenware & Electronics",
+    "Sports & Fitness": "Sports & Fitness",
+    "Stationery": "Stationery",
+    "General": "General"
+  }
+}

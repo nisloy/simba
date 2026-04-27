@@ -1,11 +1,15 @@
 <script setup lang="ts">
 import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import { useCartStore } from '../store/cart'
 import { useSettingsStore } from '../store/settings'
 import { storeToRefs } from 'pinia'
 import MoMoModal from './MoMoModal.vue'
 
+const { t } = useI18n()
 const cartStore = useCartStore()
+const router = useRouter()
 const settingsStore = useSettingsStore()
 const { items, totalAmount, isOpen } = storeToRefs(cartStore)
 
@@ -16,7 +20,8 @@ const formatPrice = (price: number) => {
 }
 
 const handleCheckout = () => {
-  isMoMoModalOpen.value = true
+  cartStore.toggleDrawer()
+  router.push('/checkout')
 }
 </script>
 
@@ -50,7 +55,7 @@ const handleCheckout = () => {
               <!-- Header -->
               <div class="px-8 py-8 border-b border-stone-100 dark:border-zinc-800 flex items-center justify-between">
                 <h2 class="text-2xl font-black flex items-center gap-3 dark:text-white">
-                  {{ settingsStore.t('cart') }}
+                  {{ t('cart.title') }}
                   <span class="text-xs bg-orange-500 text-white px-2.5 py-1 rounded-full shadow-lg shadow-orange-500/20">{{ items.length }}</span>
                 </h2>
                 <button @click="cartStore.toggleDrawer()" class="p-3 hover:bg-stone-100 dark:hover:bg-zinc-900 rounded-2xl transition-all active:scale-90">
@@ -68,8 +73,8 @@ const handleCheckout = () => {
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
                     </svg>
                   </div>
-                  <p class="font-bold text-lg tracking-tight">{{ settingsStore.t('emptyCart') }}</p>
-                  <button @click="cartStore.toggleDrawer()" class="text-orange-600 font-black hover:underline underline-offset-8">Continue Shopping</button>
+                  <p class="font-bold text-lg tracking-tight">{{ t('cart.empty') }}</p>
+                  <button @click="cartStore.toggleDrawer()" class="text-orange-600 font-black hover:underline underline-offset-8">{{ t('cart.continue') }}</button>
                 </div>
 
                 <div v-for="item in items" :key="item.id" class="flex gap-5 group">
@@ -108,7 +113,7 @@ const handleCheckout = () => {
               <div v-if="items.length > 0" class="px-8 py-10 border-t border-stone-100 dark:border-zinc-800 bg-white/50 dark:bg-zinc-950/50 space-y-8">
                 <div class="flex justify-between items-end">
                   <div class="space-y-1">
-                    <p class="text-stone-400 dark:text-zinc-500 font-black uppercase text-[10px] tracking-widest">{{ settingsStore.t('total') }}</p>
+                    <p class="text-stone-400 dark:text-zinc-500 font-black uppercase text-[10px] tracking-widest">{{ t('cart.total') }}</p>
                     <p class="text-3xl font-black dark:text-white tracking-tighter">{{ formatPrice(totalAmount) }}</p>
                   </div>
                 </div>
@@ -116,7 +121,7 @@ const handleCheckout = () => {
                   @click="handleCheckout"
                   class="w-full py-6 bg-orange-500 hover:bg-orange-600 text-white font-black rounded-[2rem] shadow-2xl shadow-orange-500/40 transition-all active:scale-95 flex items-center justify-center gap-4 text-xl group"
                 >
-                  {{ settingsStore.t('checkout') }}
+                  {{ t('cart.checkout') }}
                   <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 group-hover:translate-x-2 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M14 5l7 7m0 0l-7 7m7-7H3" />
                   </svg>

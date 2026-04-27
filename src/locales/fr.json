@@ -1,0 +1,53 @@
+{
+  "nav": {
+    "about_us": "À propos",
+    "contact_us": "Contactez-nous",
+    "promotions": "Promotions",
+    "account": "Compte",
+    "login": "Connexion",
+    "signup": "S’inscrire",
+    "dark_mode": "Mode sombre"
+  },
+  "hero": {
+    "title": "LE PREMIER MARCHÉ DE PRODUITS FRAIS DU RWANDA.",
+    "desc": "Découvrez les meilleurs produits locaux et les essentiels mondiaux livrés avec la chaleur rwandaise. Nous apportons la récolte directement à votre porte.",
+    "shop_now": "Acheter maintenant"
+  },
+  "search": {
+    "placeholder": "Rechercher des produits...",
+    "no_items": "Aucun article trouvé dans cette catégorie."
+  },
+  "product": {
+    "add_to_cart": "Ajouter au panier",
+    "sold_out": "Épuisé",
+    "featured": "SPÉCIAL",
+    "spotlight": "EN VEDETTE",
+    "price": "Prix"
+  },
+  "cart": {
+    "title": "Votre panier",
+    "checkout": "Passer à la caisse",
+    "total": "Montant Total",
+    "empty": "Votre panier est vide",
+    "continue": "Continuer vos achats"
+  },
+  "payment": {
+    "select_provider": "Choisir le fournisseur",
+    "number": "Numéro de paiement",
+    "confirm": "Confirmer le paiement",
+    "success": "Succès!",
+    "confirmed": "Votre commande est confirmée"
+  },
+  "categories": {
+    "All": "Tous",
+    "Alcoholic Drinks": "Boissons alcoolisées",
+    "Baby Products": "Produits pour bébés",
+    "Cleaning & Sanitary": "Nettoyage et hygiène",
+    "Cosmetics & Personal Care": "Cosmétiques et soins",
+    "Food Products": "Produits alimentaires",
+    "Kitchenware & Electronics": "Cuisine et électronique",
+    "Sports & Fitness": "Sports et fitness",
+    "Stationery": "Papeterie",
+    "General": "Général"
+  }
+}

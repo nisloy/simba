@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { useRoute } from 'vue-router'
 import { useProductStore } from '../store/products'
 import { useCartStore } from '../store/cart'
 import { useSettingsStore } from '../store/settings'
 
+const { t } = useI18n()
 const route = useRoute()
 const productStore = useProductStore()
 const cartStore = useCartStore()
@@ -45,13 +47,13 @@ const formatPrice = (price: number) => {
         <div class="space-y-6">
           <div class="flex items-center gap-3">
             <span class="bg-orange-100 dark:bg-orange-500/10 text-orange-600 font-black text-[10px] px-3 py-1 rounded-full uppercase tracking-widest">{{ product.category }}</span>
-            <span v-if="!product.inStock" class="bg-zinc-100 dark:bg-zinc-800 text-zinc-400 font-bold text-[10px] px-3 py-1 rounded-full uppercase tracking-widest">{{ settingsStore.t('soldOut') }}</span>
+            <span v-if="!product.inStock" class="bg-zinc-100 dark:bg-zinc-800 text-zinc-400 font-bold text-[10px] px-3 py-1 rounded-full uppercase tracking-widest">{{ t('product.sold_out') }}</span>
           </div>
           <h1 class="text-4xl md:text-5xl font-black dark:text-white leading-tight tracking-tight">{{ product.name }}</h1>
         </div>
 
         <div class="space-y-4">
-          <p class="text-zinc-500 dark:text-zinc-400 font-bold uppercase text-xs tracking-widest">{{ settingsStore.t('total') }}</p>
+          <p class="text-zinc-500 dark:text-zinc-400 font-bold uppercase text-xs tracking-widest">{{ t('cart.total') }}</p>
           <p class="text-5xl font-black dark:text-white">{{ formatPrice(product.price) }}</p>
         </div>
 
@@ -84,7 +86,7 @@ const formatPrice = (price: number) => {
           <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
           </svg>
-          {{ product.inStock ? settingsStore.t('addToCart') : settingsStore.t('soldOut') }}
+          {{ product.inStock ? t('product.add_to_cart') : t('product.sold_out') }}
         </button>
       </div>
     </div>

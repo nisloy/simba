@@ -1,0 +1,53 @@
+{
+  "nav": {
+    "about_us": "About Us",
+    "contact_us": "Twandikire",
+    "promotions": "Anuansyi",
+    "account": "Konti",
+    "login": "Injira",
+    "signup": "Kwiyandikisha",
+    "dark_mode": "Dark Mode"
+  },
+  "hero": {
+    "title": "ISOKO RYA MBERE RY'IMBUTO N'IMBOGA MU RWANDA.",
+    "desc": "Mugire ibyiza by'umusaruro w'imbere mu gihugu n'ibikenerwa ku rwego mpuzamahanga bigezweho n'urugwiro rw'abanyarwanda. Tugeza umusaruro ku muryango wanyu.",
+    "shop_now": "Gura ubu"
+  },
+  "search": {
+    "placeholder": "Shaka ibicuruzwa...",
+    "no_items": "Nta bikoresho byabonetse muri iki cyiciro."
+  },
+  "product": {
+    "add_to_cart": "Ongeramo",
+    "sold_out": "Byashize",
+    "featured": "BYATORANYIJWE",
+    "spotlight": "IBY'IBANZE",
+    "price": "Igiciro"
+  },
+  "cart": {
+    "title": "Isakoshi yawe",
+    "checkout": "Ishyura",
+    "total": "Igiteranyo",
+    "empty": "Isakoshi irimo ubusa",
+    "continue": "Komeza guhaha"
+  },
+  "payment": {
+    "select_provider": "Hitamo uburyo",
+    "number": "Nimero yishyura",
+    "confirm": "Emeza kwishyura",
+    "success": "Byakunze!",
+    "confirmed": "Guhaha kwanyu kwemejwe"
+  },
+  "categories": {
+    "All": "Byose",
+    "Alcoholic Drinks": "Inzoga",
+    "Baby Products": "Iby'abana",
+    "Cleaning & Sanitary": "Isuku",
+    "Cosmetics & Personal Care": "Ubwiza",
+    "Food Products": "Ibiribwa",
+    "Kitchenware & Electronics": "Ibikoresho",
+    "Sports & Fitness": "Siporo",
+    "Stationery": "Ibiro",
+    "General": "Rusange"
+  }
+}

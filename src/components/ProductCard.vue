@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { Product } from '../store/products'
 import { useCartStore } from '../store/cart'
 import { useSettingsStore } from '../store/settings'
 import { categoryIcons } from '../data/categoryIcons'
 
+const { t } = useI18n()
 const props = defineProps<{
   product: Product
 }>()
@@ -97,7 +99,7 @@ const formatPrice = (price: number) => {
       <!-- Stock Badge -->
       <div class="absolute top-2 right-2">
         <span v-if="!product.inStock" class="bg-zinc-900/80 backdrop-blur-md text-white text-[10px] px-2 py-1 rounded-full font-bold uppercase tracking-tighter">
-          {{ settingsStore.t('sold_out') }}
+          {{ t('product.sold_out') }}
         </span>
       </div>
     </router-link>
@@ -120,7 +122,7 @@ const formatPrice = (price: number) => {
       <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 group-hover/btn:rotate-12 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4" />
       </svg>
-      {{ product.inStock ? settingsStore.t('add_to_cart') : settingsStore.t('sold_out') }}
+      {{ product.inStock ? t('product.add_to_cart') : t('product.sold_out') }}
     </button>
   </div>
 </template>

@@ -3,6 +3,8 @@ import HomeView from '../views/Home.vue'
 import ProductDetailView from '../views/ProductDetail.vue'
 import AboutView from '../views/About.vue'
 import ContactView from '../views/Contact.vue'
+import CheckoutView from '../views/Checkout.vue'
+import BranchDashboardView from '../views/BranchDashboard.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -27,6 +29,16 @@ const router = createRouter({
       path: '/contact',
       name: 'contact',
       component: ContactView
+    },
+    {
+      path: '/checkout',
+      name: 'checkout',
+      component: CheckoutView
+    },
+    {
+      path: '/dashboard',
+      name: 'dashboard',
+      component: BranchDashboardView
     }
   ],
   scrollBehavior() {

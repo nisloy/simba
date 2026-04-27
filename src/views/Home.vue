@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 import CategoryFilter from '../components/CategoryFilter.vue'
 import ProductGrid from '../components/ProductGrid.vue'
 import { useProductStore } from '../store/products'
@@ -8,6 +9,7 @@ import { useSettingsStore } from '../store/settings'
 import { categoryIcons } from '../data/categoryIcons'
 import spotlightImg from '@/assets/adidas.jpg'
 
+const { t } = useI18n()
 const productStore = useProductStore()
 const cartStore = useCartStore()
 const settingsStore = useSettingsStore()
@@ -45,12 +47,16 @@ const formatPrice = (price: number) => {
             
             <div class="space-y-10 text-center lg:text-left">
               <div class="space-y-6">
-                <span class="inline-block bg-orange-100 dark:bg-orange-500/10 text-orange-600 px-5 py-2 rounded-full text-xs font-black uppercase tracking-[0.2em] shadow-sm">Premium Quality</span>
+                <div class="flex flex-wrap justify-center lg:justify-start gap-3">
+                  <span class="bg-orange-100 dark:bg-orange-500/10 text-orange-600 px-5 py-2 rounded-full text-[10px] font-black uppercase tracking-[0.2em] shadow-sm">45-Min Delivery</span>
+                  <span class="bg-green-100 dark:bg-green-500/10 text-green-600 px-5 py-2 rounded-full text-[10px] font-black uppercase tracking-[0.2em] shadow-sm">MoMo Accepted</span>
+                  <span class="bg-blue-100 dark:bg-blue-500/10 text-blue-600 px-5 py-2 rounded-full text-[10px] font-black uppercase tracking-[0.2em] shadow-sm">9 Kigali Branches</span>
+                </div>
                 <h1 class="text-6xl md:text-8xl font-black tracking-tight leading-[0.9] text-stone-900 dark:text-zinc-100 uppercase">
-                  {{ settingsStore.t('hero_title') }}
+                  {{ t('hero.title') }}
                 </h1>
                 <p class="text-lg md:text-xl text-stone-500 dark:text-zinc-400 font-bold leading-relaxed max-w-xl mx-auto lg:mx-0">
-                  {{ settingsStore.t('hero_desc') }}
+                  {{ t('hero.desc') }}
                 </p>
               </div>
               
@@ -58,7 +64,7 @@ const formatPrice = (price: number) => {
                 @click="scrollToGrid"
                 class="group px-10 py-5 bg-orange-500 hover:bg-orange-600 text-white font-black rounded-[2rem] shadow-2xl shadow-orange-500/40 transition-all active:scale-95 flex items-center gap-4 mx-auto lg:mx-0 text-lg uppercase tracking-widest"
               >
-                {{ settingsStore.t('shop_now') }}
+                {{ t('hero.shop_now') }}
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 group-hover:translate-y-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M19 9l-7 7-7-7" />
                 </svg>
@@ -71,10 +77,10 @@ const formatPrice = (price: number) => {
               <div class="relative bg-white dark:bg-zinc-900 p-8 md:p-12 rounded-[3.5rem] shadow-2xl border border-stone-100 dark:border-zinc-800 space-y-8 animate-float group-hover:rotate-1 transition-all duration-700 ease-out">
                 <div class="flex items-center justify-between">
                   <span class="bg-stone-900 text-white text-[10px] font-black px-3 py-1.5 rounded-full uppercase tracking-[0.2em] group-hover:bg-orange-600 transition-colors">
-                    {{ settingsStore.t('spotlight') }}
+                    {{ t('product.spotlight') }}
                   </span>
                   <span class="text-orange-600 font-black text-xs uppercase tracking-widest animate-pulse">
-                    {{ settingsStore.t('featured') }}
+                    {{ t('product.featured') }}
                   </span>
                 </div>
 
@@ -91,7 +97,7 @@ const formatPrice = (price: number) => {
                   <div v-else class="w-full h-full flex items-center justify-center bg-orange-50 dark:bg-zinc-950/50" v-html="categoryIcons[featuredProduct.category] || categoryIcons['default']"></div>
 
                   <div class="absolute bottom-4 right-4 bg-white/90 dark:bg-zinc-900/90 backdrop-blur-md px-6 py-3 rounded-2xl shadow-xl border border-stone-100 dark:border-zinc-800 z-20 transform group-hover:-translate-y-2 transition-transform duration-500">
-                    <p class="text-[10px] font-black text-stone-400 uppercase tracking-widest leading-none mb-1">{{ settingsStore.t('price') }}</p>
+                    <p class="text-[10px] font-black text-stone-400 uppercase tracking-widest leading-none mb-1">{{ t('product.price') }}</p>
                     <p class="text-xl font-black text-stone-900 dark:text-white">{{ formatPrice(featuredProduct.price) }}</p>
                   </div>
                 </div>
@@ -109,7 +115,7 @@ const formatPrice = (price: number) => {
                   <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4" />
                   </svg>
-                  {{ settingsStore.t('add_to_cart') }}
+                  {{ t('product.add_to_cart') }}
                 </button>
               </div>
             </div>

@@ -1,18 +1,25 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { useProductStore } from './store/products'
 import { useCartStore } from './store/cart'
 import { useSettingsStore, Locale } from './store/settings'
+import { useAuthStore } from './store/auth'
+import { useInventoryStore } from './store/inventory'
 import CartDrawer from './components/CartDrawer.vue'
 import AuthModal from './components/AuthModal.vue'
 
+const { t } = useI18n()
 const productStore = useProductStore()
 const cartStore = useCartStore()
 const settingsStore = useSettingsStore()
+const authStore = useAuthStore()
+const inventoryStore = useInventoryStore()
 
 const searchQuery = ref('')
 const isLangMenuOpen = ref(false)
 const isAuthModalOpen = ref(false)
+const isAuthMenuOpen = ref(false)
 
 const locales: { label: string, value: Locale }[] = [
   { label: 'EN', value: 'en' },
@@ -22,6 +29,7 @@ const locales: { label: string, value: Locale }[] = [
 
 onMounted(() => {
   settingsStore.applyTheme()
+  inventoryStore.initStock(productStore.products.map(p => p.id))
 })
 
 const handleSearch = () => {
@@ -56,10 +64,17 @@ const changeLocale = (loc: Locale) => {
             <input 
               v-model="searchQuery"
               @input="handleSearch"
+              @keyup.enter="productStore.executeAiSearch"
               type="text" 
-              :placeholder="settingsStore.t('search_placeholder')" 
-              class="w-full bg-stone-100/50 dark:bg-zinc-900 border-none rounded-2xl py-2.5 pl-11 pr-4 text-sm font-bold focus:ring-4 focus:ring-orange-500/10 focus:bg-white dark:focus:bg-zinc-800 transition-all outline-none shadow-inner"
+              :placeholder="t('search.placeholder')" 
+              class="w-full bg-stone-100/50 dark:bg-zinc-900 border-none rounded-2xl py-2.5 pl-11 pr-12 text-sm font-bold focus:ring-4 focus:ring-orange-500/10 focus:bg-white dark:focus:bg-zinc-800 transition-all outline-none shadow-inner"
             >
+            <button 
+              @click="productStore.executeAiSearch"
+              class="absolute right-2 top-1.5 bottom-1.5 px-3 bg-orange-500 hover:bg-orange-600 text-white rounded-xl text-[10px] font-black uppercase tracking-tighter transition-all"
+            >
+              AI
+            </button>
           </div>
         </div>
 
@@ -106,11 +121,30 @@ const changeLocale = (loc: Locale) => {
           </button>
 
           <!-- Account Toggle -->
-          <button @click="isAuthModalOpen = true" class="w-10 h-10 flex items-center justify-center rounded-xl hover:bg-stone-100 dark:hover:bg-zinc-900 text-stone-400 transition-all active:scale-90">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-            </svg>
-          </button>
+          <div class="relative">
+            <button @click="authStore.isAuthenticated ? isAuthMenuOpen = !isAuthMenuOpen : isAuthModalOpen = true" class="w-10 h-10 flex items-center justify-center rounded-xl hover:bg-stone-100 dark:hover:bg-zinc-900 text-stone-400 transition-all active:scale-90" :class="{ 'text-orange-600': authStore.isAuthenticated }">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+              </svg>
+            </button>
+            <transition
+              enter-active-class="transition duration-100 ease-out"
+              enter-from-class="transform scale-95 opacity-0"
+              enter-to-class="transform scale-100 opacity-100"
+              leave-active-class="transition duration-75 ease-in"
+              leave-from-class="transform scale-100 opacity-100"
+              leave-to-class="transform scale-95 opacity-0"
+            >
+              <div v-if="isAuthMenuOpen && authStore.isAuthenticated" class="absolute right-0 mt-2 w-48 origin-top-right rounded-2xl bg-white/90 dark:bg-zinc-900/90 backdrop-blur-xl shadow-2xl border border-stone-100 dark:border-zinc-800 overflow-hidden py-2 z-50">
+                <div class="px-4 py-2 border-b border-stone-100 dark:border-zinc-800">
+                  <p class="text-[10px] font-black text-stone-400 uppercase tracking-widest">Logged in as</p>
+                  <p class="text-xs font-black truncate dark:text-white">{{ authStore.user?.name }}</p>
+                </div>
+                <router-link v-if="authStore.user?.role !== 'customer'" to="/dashboard" @click="isAuthMenuOpen = false" class="block w-full px-4 py-2 text-left text-xs font-black hover:bg-stone-50 dark:hover:bg-zinc-800 transition-colors uppercase tracking-widest">Dashboard</router-link>
+                <button @click="authStore.logout(); isAuthMenuOpen = false" class="w-full px-4 py-2 text-left text-xs font-black text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors uppercase tracking-widest">Logout</button>
+              </div>
+            </transition>
+          </div>
           
           <!-- Cart Icon -->
           <button @click="cartStore.toggleDrawer()" class="relative w-10 h-10 flex items-center justify-center rounded-xl hover:bg-stone-100 dark:hover:bg-zinc-900 text-stone-400 transition-all active:scale-90">
@@ -127,19 +161,28 @@ const changeLocale = (loc: Locale) => {
 
     <!-- Mobile Search Bar -->
     <div class="md:hidden px-4 py-3 bg-stone-50 dark:bg-zinc-950 border-b border-stone-200/50 dark:border-zinc-800/50">
-      <div class="relative w-full">
-        <span class="absolute inset-y-0 left-0 flex items-center pl-4">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-stone-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-          </svg>
-        </span>
-        <input 
-          v-model="searchQuery"
-          @input="handleSearch"
-          type="text" 
-          :placeholder="settingsStore.t('search_placeholder')" 
-          class="w-full bg-stone-100 dark:bg-zinc-900 border-none rounded-2xl py-3 pl-11 pr-4 text-sm font-bold focus:ring-4 focus:ring-orange-500/10 transition-all outline-none"
+      <div class="relative w-full flex gap-2">
+        <div class="relative flex-1">
+          <span class="absolute inset-y-0 left-0 flex items-center pl-4">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-stone-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+          </span>
+          <input 
+            v-model="searchQuery"
+            @input="handleSearch"
+            @keyup.enter="productStore.executeAiSearch"
+            type="text" 
+            :placeholder="t('search.placeholder')" 
+            class="w-full bg-stone-100 dark:bg-zinc-900 border-none rounded-2xl py-3 pl-11 pr-4 text-sm font-bold focus:ring-4 focus:ring-orange-500/10 transition-all outline-none"
+          >
+        </div>
+        <button 
+          @click="productStore.executeAiSearch"
+          class="px-4 bg-orange-500 text-white rounded-2xl text-xs font-black uppercase tracking-widest active:scale-90 transition-all"
         >
+          AI
+        </button>
       </div>
     </div>
 
@@ -170,9 +213,9 @@ const changeLocale = (loc: Locale) => {
         </div>
         
         <nav class="flex gap-8">
-          <router-link to="/about" class="text-sm font-black text-stone-400 hover:text-orange-600 uppercase tracking-widest transition-colors">{{ settingsStore.t('about_us') }}</router-link>
-          <router-link to="/contact" class="text-sm font-black text-stone-400 hover:text-orange-600 uppercase tracking-widest transition-colors">{{ settingsStore.t('contact_us') }}</router-link>
-          <a href="#" class="text-sm font-black text-stone-400 hover:text-orange-600 uppercase tracking-widest transition-colors">{{ settingsStore.t('promotions') }}</a>
+          <router-link to="/about" class="text-sm font-black text-stone-400 hover:text-orange-600 uppercase tracking-widest transition-colors">{{ t('nav.about_us') }}</router-link>
+          <router-link to="/contact" class="text-sm font-black text-stone-400 hover:text-orange-600 uppercase tracking-widest transition-colors">{{ t('nav.contact_us') }}</router-link>
+          <a href="#" class="text-sm font-black text-stone-400 hover:text-orange-600 uppercase tracking-widest transition-colors">{{ t('nav.promotions') }}</a>
         </nav>
         
         <p class="text-[10px] font-bold text-stone-300 uppercase tracking-[0.2em]">&copy; 2026 Simba Supermarket Ltd.</p>
